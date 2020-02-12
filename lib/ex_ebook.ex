@@ -1,18 +1,31 @@
 defmodule ExEbook do
   @moduledoc """
-  Documentation for ExEbook.
+  Documentation for ExEbook Metadata metadata.
   """
+  @formats ~w[.pdf .PDF]
 
-  @doc """
-  Hello world.
+  def extract_metadata(file) do
+    case validate_format(file) do
+      :ok ->
+        "pdfinfo"
+        |> System.cmd([file])
+        |> ExEbook.Metadata.new()
+      :error ->
+        {:error, :invalid_format}
+    end
+  end
 
-  ## Examples
+  defp extract_metadata_from(file) do
+    case System.cmd("pdfinfo", [file]) do
+      {data, 0} ->
+        data
 
-      iex> ExEbook.hello()
-      :world
+      _other ->
+        {:error, :incorrect_file}
+    end
+  end
 
-  """
-  def hello do
-    :world
+  defp validate_format(file) do
+    if Path.extname(file) in @formats, do: :ok, else: :error
   end
 end
