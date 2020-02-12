@@ -5,7 +5,7 @@ defmodule ExEbook.Metadata do
   defstruct ~w[title authors pages page_size file_size creator]a
 
   @callback read_file(path :: String.t) :: String.t()
-  @callback extract_metadata(data :: String.t) :: map() | {:error, atom()}
+  @callback extract_metadata(data :: String.t) :: map()
   @callback transform(information :: list()) :: %__MODULE__{}
 
 end

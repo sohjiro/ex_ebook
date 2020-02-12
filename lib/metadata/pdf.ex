@@ -3,13 +3,12 @@ defmodule ExEbook.Metadata.Pdf do
   Documentation for metadata element.
   """
   @behaviour ExEbook.Metadata
+  alias ExEbook.Metadata
 
   @line_delimiter "\n"
   @colon_delimiter ":"
   @comma_delimiter ","
   @space_delimite " "
-
-  alias ExEbook.Metadata
 
   def read_file(path) do
     case System.cmd("pdfinfo", [path]) do
