@@ -10,10 +10,18 @@ defmodule ExEbook.Metadata.Pdf do
   @comma_delimiter ","
   @space_delimite " "
 
+  def process(file) do
+    with {:ok, data} <- read_file(file) do
+      data
+      |> extract_metadata()
+      |> transform()
+    end
+  end
+
   def read_file(path) do
     case System.cmd("pdfinfo", [path]) do
       {data, 0} ->
-        data
+        {:ok, data}
 
       _other ->
         {:error, :invalid_type}

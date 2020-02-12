@@ -6,18 +6,19 @@ defmodule ExEbook.Metadata.PdfTest do
     setup [:complete_metadata]
 
     test "should read a pdf file", %{path: path} do
-      assert Pdf.read_file(path)
+      assert {:ok, _} = Pdf.read_file(path)
     end
 
     test "should extract metadata from file", %{path: path} do
-      data = Pdf.read_file(path)
+      {:ok, data} = Pdf.read_file(path)
       assert Pdf.extract_metadata(data) == expected_metadata()
     end
 
     test "should transform metadata into a struct", %{path: path} do
+      {:ok, data} = Pdf.read_file(path)
+
       metadata =
-        path
-        |> Pdf.read_file()
+        data
         |> Pdf.extract_metadata()
         |> Pdf.transform()
 
