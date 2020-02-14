@@ -25,10 +25,7 @@ defmodule ExEbook.Metadata.PdfTest do
       assert %ExEbook.Metadata{
         title: "No Silver Bullet ­ Essence and Accident in Software Engineering",
         authors: ["Frederick Brooks"],
-        pages: "16",
-        page_size: "612 x 792 pts (letter) (rotated 0 degrees)",
-        file_size: "266288",
-        creator: "Acrobat PDFMaker 5.0 for Word",
+        pages: "16"
       } = metadata
     end
   end

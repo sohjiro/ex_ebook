@@ -2,7 +2,8 @@ defmodule ExEbook do
   @moduledoc """
   Documentation for ExEbook Metadata metadata.
   """
-  @pdf_formats ~w[.pdf .PDF]
+  @pdf ".pdf"
+  @epub ".epub"
 
   def extract_metadata(file) do
     file
@@ -10,9 +11,9 @@ defmodule ExEbook do
     |> process()
   end
 
-  defp split(file), do: {file, Path.extname(file)}
+  defp split(file), do: {file, file |> Path.extname() |> String.downcase()}
 
-  defp process({file, extname}) when extname in @pdf_formats do
+  defp process({file, @pdf}) do
     ExEbook.Metadata.Pdf.process(file)
   end
 

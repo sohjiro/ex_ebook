@@ -2,13 +2,12 @@ defmodule ExEbook.Metadata.Pdf do
   @moduledoc """
   Documentation for metadata element.
   """
-  @behaviour ExEbook.Metadata
+  @behaviour ExEbook.Extracter
   alias ExEbook.Metadata
 
   @line_delimiter "\n"
   @colon_delimiter ":"
   @comma_delimiter ","
-  @space_delimite " "
 
   def process(file) do
     with {:ok, data} <- read_file(file) do
@@ -39,8 +38,6 @@ defmodule ExEbook.Metadata.Pdf do
     |> add_title(information)
     |> add_authors(information)
     |> add_pages(information)
-    |> add_page_size(information)
-    |> add_file_size(information)
     |> add_creator(information)
   end
 
@@ -56,16 +53,8 @@ defmodule ExEbook.Metadata.Pdf do
     %{metadata | pages: find_attribute(information, "Pages")}
   end
 
-  defp add_page_size(metadata, information) do
-    %{metadata | page_size: find_attribute(information, "Page size")}
-  end
-
-  defp add_file_size(metadata, information) do
-    %{metadata | file_size: format_size(information)}
-  end
-
   defp add_creator(metadata, information) do
-    %{metadata | creator: find_attribute(information, "Creator")}
+    %{metadata | publisher: find_attribute(information, "Creator")}
   end
 
   defp to_map(line, metadata) do
@@ -93,13 +82,6 @@ defmodule ExEbook.Metadata.Pdf do
       author ->
         split_by(author, @comma_delimiter)
     end
-  end
-
-  defp format_size(data) do
-    data
-    |> find_attribute("File size")
-    |> split_by(@space_delimite)
-    |> Enum.at(0)
   end
 
   defp split_by(text, delimiter, opts \\ []) do
