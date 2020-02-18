@@ -8,8 +8,7 @@ defmodule ExEbook.Metadata.Epub do
 
   def read_file(path) do
     path
-    |> to_charlist()
-    |> open_file_in_memory()
+    |> ExEbook.Zip.open_file_in_memory()
     |> document_content()
   end
 
@@ -30,15 +29,12 @@ defmodule ExEbook.Metadata.Epub do
     |> add_subject(information, "subject")
   end
 
-  defp open_file_in_memory(file),
-    do: :zip.zip_open(file, [:memory])
-
   defp document_content({:ok, zip_pid}) do
-    case :zip.zip_get('content.opf', zip_pid) do
-      {:ok, {_filename, document}} ->
+    case ExEbook.Zip.read_in_memory_file(zip_pid, "content.opf") do
+      {:ok, document} ->
         {:ok, document}
 
-      _error ->
+      :error ->
         {:error, :epub_read}
     end
   end
