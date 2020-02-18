@@ -1,6 +1,6 @@
 defmodule ExEbook.Metadata.Pdf do
   @moduledoc """
-  Documentation for metadata element.
+  Module for handling metadata information for PDF files
   """
   use ExEbook.Converter
   @line_delimiter "\n"

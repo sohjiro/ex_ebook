@@ -1,6 +1,6 @@
 defmodule ExEbook.Metadata.Epub do
   @moduledoc """
-  Documentation for metadata element.
+  Module for handling metadata information for EPUB files
   """
   use ExEbook.Converter
 
