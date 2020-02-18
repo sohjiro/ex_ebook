@@ -2,10 +2,9 @@ defmodule ExEbook.Metadata.Epub do
   @moduledoc """
   Documentation for metadata element.
   """
-  @behaviour ExEbook.Extracter
+  use ExEbook.Converter
+
   @default_opts [{:namespace_conformant, true}, {:encoding, :latin1}]
-  @comma_delimiter ","
-  alias ExEbook.Metadata
 
   def read_file(path) do
     path
@@ -18,51 +17,17 @@ defmodule ExEbook.Metadata.Epub do
     data
     |> parse_document()
     |> find_elements('/package/metadata/dc:*')
-    |> to_map()
+    |> to_map(&generate_map/2)
   end
 
   def transform(information) do
     %Metadata{}
-    |> add_identifier(information) # isbn
-    |> add_title(information)
-    |> add_language(information)
-    |> add_authors(information) # creator
-    |> add_creator(information) # publisher
-    |> add_subject(information)
-  end
-
-  defp add_identifier(metadata, information) do
-    %{metadata | isbn: find_attribute(information, "identifier")}
-  end
-
-  defp add_title(metadata, information) do
-    %{metadata | title: find_attribute(information, "title")}
-  end
-
-  defp add_language(metadata, information) do
-    %{metadata | language: find_attribute(information, "language")}
-  end
-
-  defp add_authors(metadata, information) do
-    %{metadata | authors: format_authors(information)}
-  end
-
-  defp add_creator(metadata, information) do
-    %{metadata | publisher: find_attribute(information, "publisher")}
-  end
-
-  defp add_subject(metadata, information) do
-    %{metadata | subject: find_attribute(information, "subject")}
-  end
-
-  defp format_authors(data) do
-    case find_attribute(data, "creator") do
-      nil ->
-        nil
-
-      author ->
-        split_by(author, @comma_delimiter)
-    end
+    |> add_identifier(information, "identifier") # isbn
+    |> add_title(information, "title")
+    |> add_language(information, "language")
+    |> add_authors(information, "creator") # creator
+    |> add_creator(information, "publisher") # publisher
+    |> add_subject(information, "subject")
   end
 
   defp open_file_in_memory(file),
@@ -91,10 +56,8 @@ defmodule ExEbook.Metadata.Epub do
 
   defp find_elements(xml, path), do: :xmerl_xpath.string(path, xml)
 
-  defp to_map(elements) do
-    Enum.reduce(elements, %{}, fn(node, acc) ->
-      Map.put(acc, key_name(node), node_text(node))
-    end)
+  defp generate_map(node, map) do
+    Map.put(map, key_name(node), node_text(node))
   end
 
   defp key_name(node) do
@@ -114,12 +77,5 @@ defmodule ExEbook.Metadata.Epub do
 
   defp extract_text([{_, _, _, _, text, _}]),
     do: :unicode.characters_to_binary(text, :latin1)
-
-  defp find_attribute(data, attribute), do: Map.get(data, attribute, nil)
-
-  defp split_by(text, delimiter, opts \\ []) do
-    opts = Keyword.merge([trim: true], opts)
-    String.split(text, delimiter, opts)
-  end
 
 end

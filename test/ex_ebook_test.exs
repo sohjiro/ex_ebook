@@ -11,7 +11,6 @@ defmodule ExEbookTest do
         pages: "16",
         publisher: "Acrobat PDFMaker 5.0 for Word",
         language: nil,
-        pages: "16",
         subject: nil,
         isbn: nil
 
