@@ -4,8 +4,6 @@ defmodule ExEbook.Metadata.Epub do
   """
   use ExEbook.Converter
 
-  @default_opts [{:namespace_conformant, true}, {:encoding, :latin1}]
-
   def read_file(path) do
     path
     |> ExEbook.Zip.open_file_in_memory()
@@ -14,8 +12,8 @@ defmodule ExEbook.Metadata.Epub do
 
   def extract_metadata(data) do
     data
-    |> parse_document()
-    |> find_elements('/package/metadata/dc:*')
+    |> ExEbook.Xml.read_document()
+    |> ExEbook.Xml.find_elements('/package/metadata/dc:*')
     |> to_map(&generate_map/2)
   end
 
@@ -41,17 +39,6 @@ defmodule ExEbook.Metadata.Epub do
 
   defp document_content(_), do: {:error, :invalid_type}
 
-  defp parse_document(document) do
-    document
-    |> to_charlist()
-    |> to_xml()
-    |> elem(0)
-  end
-
-  defp to_xml(charlist), do: :xmerl_scan.string(charlist, @default_opts)
-
-  defp find_elements(xml, path), do: :xmerl_xpath.string(path, xml)
-
   defp generate_map(node, map) do
     Map.put(map, key_name(node), node_text(node))
   end
@@ -65,13 +52,8 @@ defmodule ExEbook.Metadata.Epub do
 
   defp node_text(node) do
     node
-    |> find_elements('./text()')
-    |> extract_text()
+    |> ExEbook.Xml.find_elements('./text()')
+    |> ExEbook.Xml.text()
   end
-
-  defp extract_text([]), do: nil
-
-  defp extract_text([{_, _, _, _, text, _}]),
-    do: :unicode.characters_to_binary(text, :latin1)
 
 end
