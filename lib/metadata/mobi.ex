@@ -1,13 +1,13 @@
-defmodule ExEbook.Metadata.Pdf do
+defmodule ExEbook.Metadata.Mobi do
   @moduledoc """
-  Module for handling metadata information for PDF files
+  Module for handling metadata information for MOBI files
   """
   use ExEbook.Converter
   @line_delimiter "\n"
   @colon_delimiter ":"
 
   def read_file(path) do
-    case System.cmd("pdfinfo", [path]) do
+    case System.cmd("mobitool", [path]) do
       {data, 0} ->
         {:ok, data}
 
@@ -26,19 +26,21 @@ defmodule ExEbook.Metadata.Pdf do
     %Metadata{}
     |> add_title(information, "Title")
     |> add_authors(information, "Author")
-    |> add_pages(information, "Pages")
-    |> add_creator(information, "Creator")
+    |> add_subject(information, "Subject")
+    |> add_creator(information, "Publisher")
+    |> add_language(information, "Language")
   end
 
   defp generate_map(line, metadata) do
     values = split_and_format_values(line)
-    apply(Map, :put, [metadata | values])
+
+    if length(values) === 2, do: apply(Map, :put, [metadata | values]), else: metadata
   end
 
   defp split_and_format_values(line) do
     line
     |> split_by(@colon_delimiter, parts: 2)
-    |> Enum.map(&format_text(&1, decode: :latin1))
+    |> Enum.map(&format_text/1)
   end
 
 end

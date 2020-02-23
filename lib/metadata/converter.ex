@@ -8,6 +8,7 @@ defmodule ExEbook.Converter do
       @behaviour ExEbook.Extracter
       alias ExEbook.Metadata
       @comma_delimiter ","
+      @semicolon_delimiter ";"
 
       def process(file) do
         with {:ok, data} <- read_file(file) do
@@ -55,7 +56,9 @@ defmodule ExEbook.Converter do
             nil
 
           author ->
-            split_by(author, @comma_delimiter)
+            author
+            |> split_by([@comma_delimiter, @semicolon_delimiter])
+            |> Enum.map(&String.trim/1)
         end
       end
 
@@ -64,10 +67,16 @@ defmodule ExEbook.Converter do
         String.split(text, delimiter, opts)
       end
 
-      defp format_text(text) do
-        text
-        |> String.trim()
-        |> :unicode.characters_to_binary(:latin1)
+      defp format_text(text, opts \\ []) do
+        text = String.trim(text)
+
+        case Keyword.fetch(opts, :decode) do
+          {:ok, format} ->
+            :unicode.characters_to_binary(text, format)
+
+          _ ->
+            text
+        end
       end
 
       defp find_attribute(data, attribute), do: Map.get(data, attribute, nil)
