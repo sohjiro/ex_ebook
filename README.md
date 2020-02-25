@@ -40,7 +40,7 @@ iex> "~/Downloads/programming-ecto_p1_0.epub" |> Path.expand |> ExEbook.extract_
 
 **PDF**
 ```elixir
-iex(7)> "~/Downloads/programming-ecto_p1_0.pdf" |> Path.expand() |> ExEbook.extract_metadata
+iex> "~/Downloads/programming-ecto_p1_0.pdf" |> Path.expand() |> ExEbook.extract_metadata
 %ExEbook.Metadata{
   authors: ["Darin Wilson", "Eric Meadows-Jönsson"],
   isbn: nil,
@@ -54,7 +54,7 @@ iex(7)> "~/Downloads/programming-ecto_p1_0.pdf" |> Path.expand() |> ExEbook.extr
 
 **MOBI**
 ```elixir
-iex(9)> "~/Downloads/programming-ecto_p1_0.mobi" |> Path.expand() |> ExEbook.extract_metadata
+iex> "~/Downloads/programming-ecto_p1_0.mobi" |> Path.expand() |> ExEbook.extract_metadata
 %ExEbook.Metadata{
   authors: ["Darin Wilson", "Eric Meadows-Jönsson"],
   isbn: nil,

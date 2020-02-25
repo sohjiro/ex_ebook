@@ -4,6 +4,7 @@ defmodule ExEbook do
   """
   @pdf ".pdf"
   @epub ".epub"
+  @mobi ".mobi"
 
   def extract_metadata(file) do
     file
@@ -15,6 +16,14 @@ defmodule ExEbook do
 
   defp process({file, @pdf}) do
     ExEbook.Metadata.Pdf.process(file)
+  end
+
+  defp process({file, @mobi}) do
+    ExEbook.Metadata.Mobi.process(file)
+  end
+
+  defp process({file, @epub}) do
+    ExEbook.Metadata.Epub.process(file)
   end
 
   defp process(_), do: {:error, :invalid_format}
