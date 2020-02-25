@@ -1,6 +1,6 @@
 # ExEbook
 
-**TODO: Add description**
+Metadata extracter for digital books (EPUB, MOBI, PDF)
 
 ## Installation
 
@@ -15,7 +15,65 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/ex_ebook](https://hexdocs.pm/ex_ebook).
+## Dependencies
 
+At this moment ex_ebook needs [libmobi](https://github.com/bfabiszewski/libmobi/) and [xpdfreader](https://www.xpdfreader.com/index.html) in order to extract metadata from PDF and MOBI files.
+
+
+## Usage
+
+Extract everything in one step just as follows:
+
+**EPUB**
+```elixir
+iex> "~/Downloads/programming-ecto_p1_0.epub" |> Path.expand |> ExEbook.extract_metadata
+%ExEbook.Metadata{
+  authors: ["Darin Wilson", "Eric Meadows-Jönsson"],
+  isbn: "978-1-68050-282-4",
+  language: "en",
+  pages: nil,
+  publisher: "The Pragmatic Bookshelf, LLC (711823)",
+  subject: "Pragmatic Bookshelf",
+  title: "Programming Ecto (for Felipe Juarez Murillo)"
+}
+```
+
+**PDF**
+```elixir
+iex(7)> "~/Downloads/programming-ecto_p1_0.pdf" |> Path.expand() |> ExEbook.extract_metadata
+%ExEbook.Metadata{
+  authors: ["Darin Wilson", "Eric Meadows-Jönsson"],
+  isbn: nil,
+  language: nil,
+  pages: "231",
+  publisher: "Pragmatic Bookshelf",
+  subject: nil,
+  title: "Programming Ecto"
+}
+```
+
+**MOBI**
+```elixir
+iex(9)> "~/Downloads/programming-ecto_p1_0.mobi" |> Path.expand() |> ExEbook.extract_metadata
+%ExEbook.Metadata{
+  authors: ["Darin Wilson", "Eric Meadows-Jönsson"],
+  isbn: nil,
+  language: "en (utf8)",
+  pages: nil,
+  publisher: "The Pragmatic Bookshelf, LLC",
+  subject: "Pragmatic Bookshelf",
+  title: "Programming Ecto"
+}
+```
+
+And that's all
+
+
+## TO DO's
+
+* [ ] Using internal tool for reading MOBI metadata
+  At this moment we only support `content.opf` as the main file for extracting metadata. We need to change it and scan the `META-INF` directory and look for the `container` tag (probably inside `META-INF/container.xml`)
+
+* [ ] Support for different file in EPUB
+
+* [ ] Using internal tool for reading PDF metadata
