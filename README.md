@@ -73,7 +73,7 @@ And that's all
 
 * [ ] Using internal tool for reading MOBI metadata
 
-* [ ] Support for different files in EPUB (/META-INF)
+* [ ] Support for different files in EPUB
 
   At this moment we only support `content.opf` as the main file for extracting metadata. We need to change it and scan the `META-INF` directory and look for the `container` tag (probably inside `META-INF/container.xml`)
 
