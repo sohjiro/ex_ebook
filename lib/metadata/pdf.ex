@@ -5,15 +5,10 @@ defmodule ExEbook.Metadata.Pdf do
   use ExEbook.Converter
   @line_delimiter "\n"
   @colon_delimiter ":"
+  @command "pdfinfo"
 
   def read_file(path) do
-    case System.cmd("pdfinfo", [path]) do
-      {data, 0} ->
-        {:ok, data}
-
-      _other ->
-        {:error, :invalid_type}
-    end
+    ExEbook.Shell.execute(@command, [path])
   end
 
   def extract_metadata(data) do
