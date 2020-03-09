@@ -10,6 +10,7 @@ defmodule ExEbook.Metadata do
     pages
     publisher
     subject
+    cover
   ]a
 
 end

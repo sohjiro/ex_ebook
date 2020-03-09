@@ -15,22 +15,9 @@ defmodule ExEbook.Metadata.MobiTest do
     end
 
     test "should transform metadata into a struct", %{path: path} do
-      {:ok, data} = Mobi.read_file(path)
+      cover = File.read!("test/resources/resource00000.jpg")
 
-      metadata =
-        data
-        |> Mobi.extract_metadata()
-        |> Mobi.transform()
-
-      assert %ExEbook.Metadata{
-        title: "Radio Boys Cronies / Or, Bill Brown's Radio",
-        authors: ["S. F. Aaron", "Wayne Whipple"],
-        subject: "Boys -- Juvenile fiction; Radio -- Juvenile fiction; Inventors -- Juvenile fiction; New York (State) -- Juvenile fiction",
-        language: "en (utf8)",
-        publisher: nil,
-        isbn: nil,
-        pages: nil
-      } = metadata
+      assert Mobi.extract_image(path) == cover
     end
   end
 

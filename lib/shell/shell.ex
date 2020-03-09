@@ -15,4 +15,8 @@ defmodule ExEbook.Shell do
     end
   end
 
+  def current_tmp_dir do
+    System.tmp_dir()
+  end
+
 end
