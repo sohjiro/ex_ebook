@@ -24,7 +24,7 @@ defmodule ExEbook.Xml do
 
   def text(_), do: nil
 
-  def extract_attr([xmlAttribute(value: value)]),
+  def extract_attr([xmlAttribute(value: value) | _]),
     do: :unicode.characters_to_binary(value, :latin1)
 
   def extract_attr(_), do: nil

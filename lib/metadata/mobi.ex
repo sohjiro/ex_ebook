@@ -38,7 +38,7 @@ defmodule ExEbook.Metadata.Mobi do
         |> fetch_cover()
 
       error ->
-        Logger.error("Extracting image from MOBI file")
+        Logger.error("Extracting image from MOBI file #{inspect error}")
         :error
     end
   end
