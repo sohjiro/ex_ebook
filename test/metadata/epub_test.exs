@@ -37,6 +37,13 @@ defmodule ExEbook.Metadata.EpubTest do
         subject: nil
       } = metadata
     end
+
+    test "should extract image from an epub file" do
+      path = "test/resources/programming-ecto_p1_0.epub"
+      cover = File.read("test/resources/programming-ecto_p1_0_cover.jpg")
+
+      assert Epub.extract_image(path) == cover
+    end
   end
 
   describe "Metadata wrong extraction" do

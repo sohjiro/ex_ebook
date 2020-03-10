@@ -95,7 +95,7 @@ defmodule ExEbook.Metadata.Mobi do
     |> File.ls!()
     |> Enum.find(&(String.starts_with?(&1, cover_file)))
     |> to_absolute_path(dir_path)
-    |> File.read!()
+    |> File.read()
   end
 
   defp to_absolute_path(name, dir_path) do

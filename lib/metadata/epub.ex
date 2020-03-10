@@ -32,12 +32,21 @@ defmodule ExEbook.Metadata.Epub do
     |> add_subject(information, "subject")
   end
 
+  def extract_image(path) do
+    with {:ok, zip_pid} <- Zip.open_file_in_memory(path),
+         {:ok, document} <- open_root_file(zip_pid) do
+      document
+      |> Xml.read_document()
+      |> fetch_cover(zip_pid)
+    end
+  end
+
   defp open_root_file(zip_pid) do
     case Zip.read_in_memory_file(zip_pid, "META-INF/container.xml") do
       {:ok, document} ->
         document
         |> fetch_root_file_path()
-        |> read_document(zip_pid)
+        |> open_file(zip_pid)
 
       _ ->
         {:error, :container_not_found}
@@ -51,7 +60,7 @@ defmodule ExEbook.Metadata.Epub do
     |> Xml.extract_attr()
   end
 
-  defp read_document(file_path, zip_pid) do
+  defp open_file(file_path, zip_pid) do
     case Zip.read_in_memory_file(zip_pid, file_path) do
       {:ok, document} ->
         {:ok, document}
@@ -60,8 +69,6 @@ defmodule ExEbook.Metadata.Epub do
         {:error, :epub_read}
     end
   end
-
-  defp document_content(_), do: {:error, :invalid_type}
 
   defp generate_map(node, map) do
     Map.put(map, key_name(node), node_text(node))
@@ -79,5 +86,25 @@ defmodule ExEbook.Metadata.Epub do
     |> Xml.find_elements('./text()')
     |> Xml.text()
   end
+
+  defp fetch_cover(document, zip_pid) do
+    document
+    |> find_item_name()
+    |> find_item(document)
+    |> open_file(zip_pid)
+  end
+
+  defp find_item_name(document) do
+    document
+    |> Xml.find_elements('//meta[@name="cover"]/@content')
+    |> Xml.extract_attr()
+  end
+
+  defp find_item(item_name, document) do
+    document
+    |> Xml.find_elements('//manifest/item[@id="#{item_name}"]/@href')
+    |> Xml.extract_attr()
+  end
+
 
 end

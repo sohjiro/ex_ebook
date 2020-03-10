@@ -15,7 +15,7 @@ defmodule ExEbook.Metadata.MobiTest do
     end
 
     test "should extract image from a mobi file", %{path: path} do
-      cover = File.read!("test/resources/resource00000.jpg")
+      cover = File.read("test/resources/resource00000.jpg")
 
       assert Mobi.extract_image(path) == cover
     end
