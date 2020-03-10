@@ -5,8 +5,13 @@ defmodule ExEbook.Metadata.EpubTest do
   describe "Metadata correct extraction" do
     setup [:complete_metadata]
 
-    test "should read a pdf file", %{path: path} do
+    test "should read a epub file", %{path: path} do
       assert {:ok, "<?xml version='1.0' encoding='utf-8'?>" <> _} = Epub.read_file(path)
+    end
+
+    test "should read another ebub file" do
+      path = "/Users/sohjiro/workspace/jibril/ex_ebook/test/resources/Streams_Java_8.epub"
+      assert {:ok, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" <> _} = Epub.read_file(path)
     end
 
     test "should extract metadata from file", %{path: path} do

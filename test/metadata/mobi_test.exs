@@ -14,7 +14,7 @@ defmodule ExEbook.Metadata.MobiTest do
       assert Mobi.extract_metadata(data) == expected_metadata()
     end
 
-    test "should transform metadata into a struct", %{path: path} do
+    test "should extract image from a mobi file", %{path: path} do
       cover = File.read!("test/resources/resource00000.jpg")
 
       assert Mobi.extract_image(path) == cover
