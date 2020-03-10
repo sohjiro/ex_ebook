@@ -3,17 +3,22 @@ defmodule ExEbook.Metadata.Epub do
   Module for handling metadata information for EPUB files
   """
   use ExEbook.Converter
+  alias ExEbook.{Xml, Zip}
 
   def read_file(path) do
-    path
-    |> ExEbook.Zip.open_file_in_memory()
-    |> document_content()
+    case Zip.open_file_in_memory(path) do
+      {:ok, zip_pid} ->
+        open_root_file(zip_pid)
+
+      _ ->
+        {:error, :invalid_type}
+    end
   end
 
   def extract_metadata(data) do
     data
-    |> ExEbook.Xml.read_document()
-    |> ExEbook.Xml.find_elements('/package/metadata/dc:*')
+    |> Xml.read_document()
+    |> Xml.find_elements('/package/metadata/dc:*')
     |> to_map(&generate_map/2)
   end
 
@@ -27,8 +32,27 @@ defmodule ExEbook.Metadata.Epub do
     |> add_subject(information, "subject")
   end
 
-  defp document_content({:ok, zip_pid}) do
-    case ExEbook.Zip.read_in_memory_file(zip_pid, "content.opf") do
+  defp open_root_file(zip_pid) do
+    case Zip.read_in_memory_file(zip_pid, "META-INF/container.xml") do
+      {:ok, document} ->
+        document
+        |> fetch_root_file_path()
+        |> read_document(zip_pid)
+
+      _ ->
+        {:error, :container_not_found}
+    end
+  end
+
+  defp fetch_root_file_path(document) do
+    document
+    |> Xml.read_document()
+    |> Xml.find_elements('//rootfile/@full-path')
+    |> Xml.extract_attr()
+  end
+
+  defp read_document(file_path, zip_pid) do
+    case Zip.read_in_memory_file(zip_pid, file_path) do
       {:ok, document} ->
         {:ok, document}
 
@@ -52,8 +76,8 @@ defmodule ExEbook.Metadata.Epub do
 
   defp node_text(node) do
     node
-    |> ExEbook.Xml.find_elements('./text()')
-    |> ExEbook.Xml.text()
+    |> Xml.find_elements('./text()')
+    |> Xml.text()
   end
 
 end
