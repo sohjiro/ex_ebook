@@ -28,6 +28,13 @@ defmodule ExEbook.Metadata.PdfTest do
         pages: "16"
       } = metadata
     end
+
+    test "should extract image from a pdf file" do
+      path = "test/resources/stuff_goes_bad_erlang_in_anger.pdf"
+      cover = File.read("test/resources/stuff_goes_bad_erlang_in_anger.jpg")
+
+      assert Pdf.extract_image(path) == cover
+    end
   end
 
   describe "Metadata wrong extraction" do
@@ -35,6 +42,11 @@ defmodule ExEbook.Metadata.PdfTest do
 
     test "should return an error tuple when file is not valid", %{path: path} do
       assert {:error, :invalid_type} = Pdf.read_file(path)
+    end
+
+    test "should not extract image from a pdf file" do
+      path = "test/resources/Brooks-NoSilverBullet.pdf"
+      assert {:error, :unsupported_operation} = Pdf.extract_image(path)
     end
   end
 
