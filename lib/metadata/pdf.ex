@@ -30,7 +30,7 @@ defmodule ExEbook.Metadata.Pdf do
   end
 
   def extract_image(path) do
-    case Shell.execute(@image_command, ["-f", "0", "-j", "-list", path, Shell.current_tmp_dir()]) do
+    case Shell.execute(@image_command, ["-f", "0", "-l", "1", "-j", "-list", path, Shell.current_tmp_dir()]) do
       {:ok, paths} ->
         paths
         |> extract_path()
@@ -56,6 +56,7 @@ defmodule ExEbook.Metadata.Pdf do
   defp extract_path(paths) do
     paths
     |> split_and_trim("\n")
+    |> IO.inspect()
     |> get_path()
   end
 
