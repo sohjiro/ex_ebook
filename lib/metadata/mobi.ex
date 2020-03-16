@@ -5,7 +5,7 @@ defmodule ExEbook.Metadata.Mobi do
   use ExEbook.Converter
   require Logger
 
-  alias ExEbook.Shell
+  alias ExEbook.{Shell, Xml}
 
   @line_delimiter "\n"
   @colon_delimiter ":"
@@ -85,9 +85,9 @@ defmodule ExEbook.Metadata.Mobi do
     dir_path
     |> Path.join(xml_file)
     |> File.read!()
-    |> ExEbook.Xml.read_document()
-    |> ExEbook.Xml.find_elements('//meta[@name="cover"]/@content')
-    |> ExEbook.Xml.extract_attr()
+    |> Xml.read_document()
+    |> Xml.find_elements('//meta[@name="cover"]/@content')
+    |> Xml.extract_attr()
   end
 
   defp fetch_image(cover_file, dir_path) do

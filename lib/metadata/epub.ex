@@ -2,8 +2,10 @@ defmodule ExEbook.Metadata.Epub do
   @moduledoc """
   Module for handling metadata information for EPUB files
   """
+  require Logger
   use ExEbook.Converter
   alias ExEbook.{Xml, Zip}
+  @root_file "META-INF/container.xml"
 
   def read_file(path) do
     case Zip.open_file_in_memory(path) do
@@ -42,22 +44,22 @@ defmodule ExEbook.Metadata.Epub do
   end
 
   defp open_root_file(zip_pid) do
-    case Zip.read_in_memory_file(zip_pid, "META-INF/container.xml") do
+    case open_file(@root_file, zip_pid) do
       {:ok, document} ->
         document
         |> fetch_root_file_path()
         |> open_file(zip_pid)
 
-      _ ->
-        {:error, :container_not_found}
+      error ->
+        Logger.error("EROR opening root file #{inspect error}")
+        error
     end
   end
 
   defp fetch_root_file_path(document) do
     document
     |> Xml.read_document()
-    |> Xml.find_elements('//rootfile/@full-path')
-    |> Xml.extract_attr()
+    |> from_document_extract_attrs('//rootfile/@full-path')
   end
 
   defp open_file(file_path, zip_pid) do
@@ -95,16 +97,17 @@ defmodule ExEbook.Metadata.Epub do
   end
 
   defp find_item_name(document) do
-    document
-    |> Xml.find_elements('//meta[@name="cover"]/@content')
-    |> Xml.extract_attr()
+    from_document_extract_attrs(document, '//meta[@name="cover"]/@content')
   end
 
   defp find_item(item_name, document) do
-    document
-    |> Xml.find_elements('//manifest/item[@id="#{item_name}"]/@href')
-    |> Xml.extract_attr()
+    from_document_extract_attrs(document, '//manifest/item[@id="#{item_name}"]/@href')
   end
 
+  defp from_document_extract_attrs(document, elements) do
+    document
+    |> Xml.find_elements(elements)
+    |> Xml.extract_attr()
+  end
 
 end
