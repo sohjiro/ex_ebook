@@ -56,7 +56,6 @@ defmodule ExEbook.Metadata.Pdf do
   defp extract_path(paths) do
     paths
     |> split_and_trim("\n")
-    |> IO.inspect()
     |> get_path()
   end
 
