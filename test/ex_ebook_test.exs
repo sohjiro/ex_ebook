@@ -4,7 +4,7 @@ defmodule ExEbookTest do
   describe "Metadata correct extraction" do
     setup [:complete_metadata]
 
-    test "should read metadata from a pdf file", %{path: path} do
+    test "should read metadata from a pdf file", %{pdf: pdf_path} do
       assert %ExEbook.Metadata{
         title: "No Silver Bullet ­ Essence and Accident in Software Engineering",
         authors: ["Frederick Brooks"],
@@ -12,9 +12,24 @@ defmodule ExEbookTest do
         publisher: "Acrobat PDFMaker 5.0 for Word",
         language: nil,
         subject: nil,
-        isbn: nil
+        isbn: nil,
+        cover: :error
+      } == ExEbook.extract_metadata(pdf_path)
+    end
 
-      } == ExEbook.extract_metadata(path)
+    test "should read metadata from an epub", %{epub: epub_path} do
+      cover = File.read!("test/resources/programming-ecto_p1_0_cover.jpg")
+
+      assert %ExEbook.Metadata{
+        title: "Programming Ecto (for Felipe Juarez Murillo)",
+        authors: ["Darin Wilson", "Eric Meadows-Jönsson"],
+        pages: nil,
+        publisher: "The Pragmatic Bookshelf, LLC (711823)",
+        language: "en",
+        subject: "Pragmatic Bookshelf",
+        isbn: "978-1-68050-282-4",
+        cover: cover
+      } == ExEbook.extract_metadata(epub_path)
     end
   end
 
@@ -27,7 +42,12 @@ defmodule ExEbookTest do
   end
 
   defp complete_metadata(context) do
-    {:ok, Map.put(context, :path, "test/resources/Brooks-NoSilverBullet.pdf")}
+    context =
+      context
+      |> Map.put(:pdf, "test/resources/Brooks-NoSilverBullet.pdf")
+      |> Map.put(:epub, "test/resources/programming-ecto_p1_0.epub")
+
+    {:ok, context}
   end
 
   defp wrong_information(context) do

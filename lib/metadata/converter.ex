@@ -15,6 +15,7 @@ defmodule ExEbook.Converter do
           data
           |> extract_metadata()
           |> transform()
+          |> add_image(file)
         end
       end
 
@@ -48,6 +49,16 @@ defmodule ExEbook.Converter do
 
       defp add_subject(metadata, information, key) do
         %{metadata | subject: find_attribute(information, key)}
+      end
+
+      defp add_image(metadata, file) do
+        case extract_image(file) do
+          {:ok, file} ->
+            %{metadata | cover: file}
+
+          _error ->
+            %{metadata | cover: :error}
+        end
       end
 
       defp format_authors(data, key) do
