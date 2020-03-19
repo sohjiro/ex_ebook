@@ -12,5 +12,4 @@ defmodule ExEbook.Metadata do
     subject
     cover
   ]a
-
 end

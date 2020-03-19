@@ -91,7 +91,6 @@ defmodule ExEbook.Converter do
       end
 
       defp find_attribute(data, attribute), do: Map.get(data, attribute, nil)
-
     end
   end
 end

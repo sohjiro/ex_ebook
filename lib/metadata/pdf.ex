@@ -30,14 +30,23 @@ defmodule ExEbook.Metadata.Pdf do
   end
 
   def extract_image(path) do
-    case Shell.execute(@image_command, ["-f", "0", "-l", "1", "-j", "-list", path, Shell.current_tmp_dir()]) do
+    case Shell.execute(@image_command, [
+           "-f",
+           "0",
+           "-l",
+           "1",
+           "-j",
+           "-list",
+           path,
+           Shell.current_tmp_dir()
+         ]) do
       {:ok, paths} ->
         paths
         |> extract_path()
         |> File.read()
 
       error ->
-        Logger.error("#{inspect error}")
+        Logger.error("#{inspect(error)}")
         {:error, :unsupported_operation}
     end
   end
@@ -68,5 +77,4 @@ defmodule ExEbook.Metadata.Pdf do
   defp split_and_trim(string, pattern) do
     String.split(string, pattern, trim: true)
   end
-
 end

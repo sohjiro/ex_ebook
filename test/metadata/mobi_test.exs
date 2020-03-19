@@ -41,7 +41,8 @@ defmodule ExEbook.Metadata.MobiTest do
     %{
       "Title" => "Radio Boys Cronies / Or, Bill Brown's Radio",
       "Author" => "S. F. Aaron; Wayne Whipple",
-      "Subject" => "Boys -- Juvenile fiction; Radio -- Juvenile fiction; Inventors -- Juvenile fiction; New York (State) -- Juvenile fiction",
+      "Subject" =>
+        "Boys -- Juvenile fiction; Radio -- Juvenile fiction; Inventors -- Juvenile fiction; New York (State) -- Juvenile fiction",
       "Publishing date" => "2004-03-01",
       "Copyright" => "Public domain in the USA.",
       "Language" => "en (utf8)",

@@ -6,7 +6,11 @@ defmodule ExEbook.Xml do
 
   require Record
 
-  Record.defrecord(:xmlAttribute, Record.extract(:xmlAttribute, from_lib: "xmerl/include/xmerl.hrl"))
+  Record.defrecord(
+    :xmlAttribute,
+    Record.extract(:xmlAttribute, from_lib: "xmerl/include/xmerl.hrl")
+  )
+
   Record.defrecord(:xmlText, Record.extract(:xmlText, from_lib: "xmerl/include/xmerl.hrl"))
 
   def read_document(text) do
@@ -17,7 +21,6 @@ defmodule ExEbook.Xml do
   end
 
   def find_elements(xml, path), do: :xmerl_xpath.string(path, xml)
-
 
   def text([xmlText(value: value)]),
     do: :unicode.characters_to_binary(value, :latin1)
@@ -30,6 +33,4 @@ defmodule ExEbook.Xml do
   def extract_attr(_), do: nil
 
   defp to_xml(charlist), do: :xmerl_scan.string(charlist, @default_opts)
-
 end
-

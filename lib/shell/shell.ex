@@ -10,7 +10,7 @@ defmodule ExEbook.Shell do
         {:ok, data}
 
       error ->
-        Logger.error("#{inspect __MODULE__} error #{inspect error}")
+        Logger.error("#{inspect(__MODULE__)} error #{inspect(error)}")
         {:error, :invalid_type}
     end
   end
@@ -18,5 +18,4 @@ defmodule ExEbook.Shell do
   def current_tmp_dir do
     System.tmp_dir()
   end
-
 end

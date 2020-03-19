@@ -23,10 +23,10 @@ defmodule ExEbook.Metadata.PdfTest do
         |> Pdf.transform()
 
       assert %ExEbook.Metadata{
-        title: "No Silver Bullet ­ Essence and Accident in Software Engineering",
-        authors: ["Frederick Brooks"],
-        pages: "16"
-      } = metadata
+               title: "No Silver Bullet ­ Essence and Accident in Software Engineering",
+               authors: ["Frederick Brooks"],
+               pages: "16"
+             } = metadata
     end
 
     test "should extract image from a pdf file" do

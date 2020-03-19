@@ -28,14 +28,14 @@ defmodule ExEbook.Metadata.EpubTest do
         |> Epub.transform()
 
       assert %ExEbook.Metadata{
-        isbn: "ffc21394-2519-4fd6-b3ce-dc5ce40c5c71",
-        title: "¡Por Dios, No te Cases! y Otros Relatos Impúdicos",
-        language: "es",
-        authors: ["EM Ariza"],
-        pages: nil,
-        publisher: nil,
-        subject: nil
-      } = metadata
+               isbn: "ffc21394-2519-4fd6-b3ce-dc5ce40c5c71",
+               title: "¡Por Dios, No te Cases! y Otros Relatos Impúdicos",
+               language: "es",
+               authors: ["EM Ariza"],
+               pages: nil,
+               publisher: nil,
+               subject: nil
+             } = metadata
     end
 
     test "should extract image from an epub file" do
@@ -55,7 +55,12 @@ defmodule ExEbook.Metadata.EpubTest do
   end
 
   defp complete_metadata(context) do
-    {:ok, Map.put(context, :path, "test/resources/por_dios_no_te_cases!_y_otros_relatos_impúdicos.epub")}
+    {:ok,
+     Map.put(
+       context,
+       :path,
+       "test/resources/por_dios_no_te_cases!_y_otros_relatos_impúdicos.epub"
+     )}
   end
 
   defp wrong_information(context) do

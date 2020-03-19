@@ -27,5 +27,4 @@ defmodule ExEbook do
   end
 
   defp process(_), do: {:error, :invalid_format}
-
 end

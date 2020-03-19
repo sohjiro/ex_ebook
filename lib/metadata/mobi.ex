@@ -38,7 +38,7 @@ defmodule ExEbook.Metadata.Mobi do
         |> fetch_cover()
 
       error ->
-        Logger.error("Extracting image from MOBI file #{inspect error}")
+        Logger.error("Extracting image from MOBI file #{inspect(error)}")
         :error
     end
   end
@@ -58,7 +58,7 @@ defmodule ExEbook.Metadata.Mobi do
   defp markup_path(data) do
     data
     |> String.split("\n", trim: true)
-    |> Enum.find(&(String.starts_with?(&1, "Saving markup")))
+    |> Enum.find(&String.starts_with?(&1, "Saving markup"))
     |> String.replace("Saving markup to ", "")
   end
 
@@ -70,7 +70,7 @@ defmodule ExEbook.Metadata.Mobi do
       |> fetch_image(dir_path)
     rescue
       error in File.Error ->
-        Logger.error("Error extracting image #{inspect error}")
+        Logger.error("Error extracting image #{inspect(error)}")
         :error
     end
   end
@@ -78,7 +78,7 @@ defmodule ExEbook.Metadata.Mobi do
   defp find_opf_file(dir_path) do
     dir_path
     |> File.ls!()
-    |> Enum.find(&(String.ends_with?(&1, ".opf")))
+    |> Enum.find(&String.ends_with?(&1, ".opf"))
   end
 
   defp find_cover_file(xml_file, dir_path) do
@@ -93,7 +93,7 @@ defmodule ExEbook.Metadata.Mobi do
   defp fetch_image(cover_file, dir_path) do
     dir_path
     |> File.ls!()
-    |> Enum.find(&(String.starts_with?(&1, cover_file)))
+    |> Enum.find(&String.starts_with?(&1, cover_file))
     |> to_absolute_path(dir_path)
     |> File.read()
   end
@@ -101,5 +101,4 @@ defmodule ExEbook.Metadata.Mobi do
   defp to_absolute_path(name, dir_path) do
     Path.join(dir_path, name)
   end
-
 end

@@ -57,5 +57,4 @@ defmodule ExEbook.Zip do
 
   defp fetch_name({:zip_file, name, _, _, _, _}), do: name
   defp fetch_name(_), do: []
-
 end

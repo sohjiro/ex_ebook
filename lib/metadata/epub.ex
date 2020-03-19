@@ -26,11 +26,14 @@ defmodule ExEbook.Metadata.Epub do
 
   def transform(information) do
     %Metadata{}
-    |> add_identifier(information, "identifier") # isbn
+    # isbn
+    |> add_identifier(information, "identifier")
     |> add_title(information, "title")
     |> add_language(information, "language")
-    |> add_authors(information, "creator") # creator
-    |> add_creator(information, "publisher") # publisher
+    # creator
+    |> add_authors(information, "creator")
+    # publisher
+    |> add_creator(information, "publisher")
     |> add_subject(information, "subject")
   end
 
@@ -51,7 +54,7 @@ defmodule ExEbook.Metadata.Epub do
         |> open_file(zip_pid)
 
       error ->
-        Logger.error("EROR opening root file #{inspect error}")
+        Logger.error("EROR opening root file #{inspect(error)}")
         error
     end
   end
@@ -109,5 +112,4 @@ defmodule ExEbook.Metadata.Epub do
     |> Xml.find_elements(elements)
     |> Xml.extract_attr()
   end
-
 end

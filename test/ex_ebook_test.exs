@@ -6,30 +6,30 @@ defmodule ExEbookTest do
 
     test "should read metadata from a pdf file", %{pdf: pdf_path} do
       assert %ExEbook.Metadata{
-        title: "No Silver Bullet ­ Essence and Accident in Software Engineering",
-        authors: ["Frederick Brooks"],
-        pages: "16",
-        publisher: "Acrobat PDFMaker 5.0 for Word",
-        language: nil,
-        subject: nil,
-        isbn: nil,
-        cover: :error
-      } == ExEbook.extract_metadata(pdf_path)
+               title: "No Silver Bullet ­ Essence and Accident in Software Engineering",
+               authors: ["Frederick Brooks"],
+               pages: "16",
+               publisher: "Acrobat PDFMaker 5.0 for Word",
+               language: nil,
+               subject: nil,
+               isbn: nil,
+               cover: :error
+             } == ExEbook.extract_metadata(pdf_path)
     end
 
     test "should read metadata from an epub", %{epub: epub_path} do
       cover = File.read!("test/resources/programming-ecto_p1_0_cover.jpg")
 
       assert %ExEbook.Metadata{
-        title: "Programming Ecto (for Felipe Juarez Murillo)",
-        authors: ["Darin Wilson", "Eric Meadows-Jönsson"],
-        pages: nil,
-        publisher: "The Pragmatic Bookshelf, LLC (711823)",
-        language: "en",
-        subject: "Pragmatic Bookshelf",
-        isbn: "978-1-68050-282-4",
-        cover: cover
-      } == ExEbook.extract_metadata(epub_path)
+               title: "Programming Ecto (for Felipe Juarez Murillo)",
+               authors: ["Darin Wilson", "Eric Meadows-Jönsson"],
+               pages: nil,
+               publisher: "The Pragmatic Bookshelf, LLC (711823)",
+               language: "en",
+               subject: "Pragmatic Bookshelf",
+               isbn: "978-1-68050-282-4",
+               cover: cover
+             } == ExEbook.extract_metadata(epub_path)
     end
   end
 
