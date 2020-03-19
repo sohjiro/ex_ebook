@@ -2,10 +2,14 @@ defmodule ExEbook do
   @moduledoc """
   Documentation for ExEbook Metadata metadata.
   """
+  @type path :: String.t()
+  @type metadata :: ExEbook.Metadata.t()
+
   @pdf ".pdf"
   @epub ".epub"
   @mobi ".mobi"
 
+  @spec extract_metadata(path) :: metadata()
   def extract_metadata(file) do
     file
     |> split()

@@ -13,6 +13,7 @@ defmodule ExEbook.Xml do
 
   Record.defrecord(:xmlText, Record.extract(:xmlText, from_lib: "xmerl/include/xmerl.hrl"))
 
+  @spec read_document(String.t()) :: tuple()
   def read_document(text) do
     text
     |> to_charlist()
@@ -20,13 +21,16 @@ defmodule ExEbook.Xml do
     |> elem(0)
   end
 
+  @spec find_elements(tuple, path) :: [tuple()]
   def find_elements(xml, path), do: :xmerl_xpath.string(path, xml)
 
+  @spec text([tuple()]) :: String.t()
   def text([xmlText(value: value)]),
     do: :unicode.characters_to_binary(value, :latin1)
 
   def text(_), do: nil
 
+  @spec extract_attr([tuple()]) :: String.t()
   def extract_attr([xmlAttribute(value: value) | _]),
     do: :unicode.characters_to_binary(value, :latin1)
 

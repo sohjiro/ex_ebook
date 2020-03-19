@@ -7,6 +7,7 @@ defmodule ExEbook.Metadata.Epub do
   alias ExEbook.{Xml, Zip}
   @root_file "META-INF/container.xml"
 
+  @impl true
   def read_file(path) do
     case Zip.open_file_in_memory(path) do
       {:ok, zip_pid} ->
@@ -17,6 +18,7 @@ defmodule ExEbook.Metadata.Epub do
     end
   end
 
+  @impl true
   def extract_metadata(data) do
     data
     |> Xml.read_document()
@@ -24,6 +26,7 @@ defmodule ExEbook.Metadata.Epub do
     |> to_map(&generate_map/2)
   end
 
+  @impl true
   def transform(information) do
     %Metadata{}
     # isbn
@@ -37,6 +40,7 @@ defmodule ExEbook.Metadata.Epub do
     |> add_subject(information, "subject")
   end
 
+  @impl true
   def extract_image(path) do
     with {:ok, zip_pid} <- Zip.open_file_in_memory(path),
          {:ok, document} <- open_root_file(zip_pid) do

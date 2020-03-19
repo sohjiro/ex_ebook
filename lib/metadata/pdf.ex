@@ -11,16 +11,19 @@ defmodule ExEbook.Metadata.Pdf do
   @command "pdfinfo"
   @image_command "pdfimages"
 
+  @impl true
   def read_file(path) do
     Shell.execute(@command, [path])
   end
 
+  @impl true
   def extract_metadata(data) do
     data
     |> split_by(@line_delimiter)
     |> to_map(&generate_map/2)
   end
 
+  @impl true
   def transform(information) do
     %Metadata{}
     |> add_title(information, "Title")
@@ -29,6 +32,7 @@ defmodule ExEbook.Metadata.Pdf do
     |> add_creator(information, "Creator")
   end
 
+  @impl true
   def extract_image(path) do
     case Shell.execute(@image_command, [
            "-f",

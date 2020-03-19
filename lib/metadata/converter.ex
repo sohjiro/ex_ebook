@@ -10,15 +10,17 @@ defmodule ExEbook.Converter do
       @comma_delimiter ","
       @semicolon_delimiter ";"
 
-      def process(file) do
-        with {:ok, data} <- read_file(file) do
+      @spec process(path) :: ExEbook.Metadata.t()
+      def process(path) do
+        with {:ok, data} <- read_file(path) do
           data
           |> extract_metadata()
           |> transform()
-          |> add_image(file)
+          |> add_image(path)
         end
       end
 
+      @spec to_map(list(), func()) :: map()
       def to_map(enum, func) do
         Enum.reduce(enum, %{}, func)
       end

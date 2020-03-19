@@ -2,19 +2,24 @@ defmodule ExEbook.Zip do
   @moduledoc """
   Module for handling zip content
   """
+  @type file :: String.t()
+  @type path :: String.t()
 
-  def open_file_in_memory(file) do
-    file
+  @spec open_file_in_memory(path) :: {:ok, pid()}
+  def open_file_in_memory(path) do
+    path
     |> to_charlist()
     |> :zip.zip_open([:memory])
   end
 
-  def read_in_memory_file(zip_pid, file) when is_pid(zip_pid) do
-    file
+  @spec read_in_memory_file(pid(), path) :: {:ok, String.t()}
+  def read_in_memory_file(zip_pid, path) when is_pid(zip_pid) do
+    path
     |> to_charlist()
     |> read_file(zip_pid)
   end
 
+  @spec list_files(pid(), path) :: [path()]
   def list_files(zip_pid, path \\ "/") do
     case :zip.zip_list_dir(zip_pid) do
       {:ok, result} ->
