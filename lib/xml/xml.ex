@@ -2,6 +2,7 @@ defmodule ExEbook.Xml do
   @moduledoc """
   Module for handling xml content
   """
+  @type xpath :: charlist()
   @default_opts [{:namespace_conformant, true}, {:encoding, :latin1}]
 
   require Record
@@ -21,8 +22,8 @@ defmodule ExEbook.Xml do
     |> elem(0)
   end
 
-  @spec find_elements(tuple, path) :: [tuple()]
-  def find_elements(xml, path), do: :xmerl_xpath.string(path, xml)
+  @spec find_elements(tuple, xpath()) :: [tuple()]
+  def find_elements(xml, xpath), do: :xmerl_xpath.string(xpath, xml)
 
   @spec text([tuple()]) :: String.t()
   def text([xmlText(value: value)]),

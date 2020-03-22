@@ -2,6 +2,8 @@ defmodule ExEbook.Metadata.Epub do
   @moduledoc """
   Module for handling metadata information for EPUB files
   """
+  @type path :: charlist()
+
   require Logger
   use ExEbook.Converter
   alias ExEbook.{Xml, Zip}

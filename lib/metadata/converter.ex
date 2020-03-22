@@ -6,6 +6,7 @@ defmodule ExEbook.Converter do
   defmacro __using__(_) do
     quote do
       @behaviour ExEbook.Extracter
+
       alias ExEbook.Metadata
       @comma_delimiter ","
       @semicolon_delimiter ";"
@@ -20,7 +21,7 @@ defmodule ExEbook.Converter do
         end
       end
 
-      @spec to_map(list(), func()) :: map()
+      @spec to_map(list(), fun()) :: map()
       def to_map(enum, func) do
         Enum.reduce(enum, %{}, func)
       end

@@ -2,6 +2,8 @@ defmodule ExEbook.Metadata.Mobi do
   @moduledoc """
   Module for handling metadata information for MOBI files
   """
+  @type path :: String.t()
+
   use ExEbook.Converter
   require Logger
 

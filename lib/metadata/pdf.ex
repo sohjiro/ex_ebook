@@ -2,6 +2,8 @@ defmodule ExEbook.Metadata.Pdf do
   @moduledoc """
   Module for handling metadata information for PDF files
   """
+  @type path :: String.t()
+
   use ExEbook.Converter
   alias ExEbook.Shell
   require Logger
