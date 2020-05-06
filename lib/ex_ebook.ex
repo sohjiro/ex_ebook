@@ -3,20 +3,23 @@ defmodule ExEbook do
   Documentation for ExEbook Metadata metadata.
   """
   @type path :: String.t()
+  @type opts :: Keyword.t()
   @type metadata :: ExEbook.Metadata.t()
 
   @pdf ".pdf"
   @epub ".epub"
   @mobi ".mobi"
 
-  @spec extract_metadata(path) :: metadata()
-  def extract_metadata(file) do
-    file
-    |> split()
+  @spec extract_metadata(path, opts) :: metadata()
+  def extract_metadata(path, opts \\ []) do
+    filename = Keyword.get(opts, :filename, path)
+
+    path
+    |> split(filename)
     |> process()
   end
 
-  defp split(file), do: {file, file |> Path.extname() |> String.downcase()}
+  defp split(path, filename), do: {path, filename |> Path.extname() |> String.downcase()}
 
   defp process({file, @pdf}) do
     ExEbook.Metadata.Pdf.process(file)
