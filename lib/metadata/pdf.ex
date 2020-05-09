@@ -58,8 +58,13 @@ defmodule ExEbook.Metadata.Pdf do
   end
 
   defp generate_map(line, metadata) do
-    values = split_and_format_values(line)
-    apply(Map, :put, [metadata | values])
+    case split_and_format_values(line) do
+      [_key, _value] = values ->
+        apply(Map, :put, [metadata | values])
+
+      _ ->
+        metadata
+    end
   end
 
   defp split_and_format_values(line) do

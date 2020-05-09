@@ -14,6 +14,11 @@ defmodule ExEbook.Metadata.PdfTest do
       assert Pdf.extract_metadata(data) == expected_metadata()
     end
 
+    test "should transform weird data" do
+      data = weird_metadata()
+      assert Pdf.extract_metadata(data) == weird_metadata_expected()
+    end
+
     test "should transform metadata into a struct", %{path: path} do
       {:ok, data} = Pdf.read_file(path)
 
@@ -74,6 +79,31 @@ defmodule ExEbook.Metadata.PdfTest do
       "File size" => "266288 bytes",
       "Optimized" => "yes",
       "PDF version" => "1.4"
+    }
+  end
+
+  defp weird_metadata do
+    """
+    Title:          Think Java\nAuthor:         \n            \nCreator:        AH CSS Formatter V6.2 MR4 for Linux64 : 6.2.6.18551 (2014/09/24 15:00JST)\nProducer:       Antenna House PDF Output Library 6.2.609 (Linux64)\nCreationDate:   Mon Apr 17 16:44:35 2017\nModDate:        Thu Apr 20 13:06:39 2017\nTagged:         no\nForm:           none\nPages:          251\nEncrypted:      no\nPage size:      504 x 661.464 pts (rotated 0 degrees)\nFile size:      5850277 bytes\nOptimized:      no\nPDF version:    1.6\n
+    """
+  end
+
+  defp weird_metadata_expected do
+    %{
+      "Title" => "Think Java",
+      "Author" => "",
+      "Creator" => "AH CSS Formatter V6.2 MR4 for Linux64 : 6.2.6.18551 (2014/09/24 15:00JST)",
+      "Producer" => "Antenna House PDF Output Library 6.2.609 (Linux64)",
+      "CreationDate" => "Mon Apr 17 16:44:35 2017",
+      "ModDate" => "Thu Apr 20 13:06:39 2017",
+      "Tagged" => "no",
+      "Form" => "none",
+      "Pages" => "251",
+      "Encrypted" => "no",
+      "Page size" => "504 x 661.464 pts (rotated 0 degrees)",
+      "File size" => "5850277 bytes",
+      "Optimized" => "no",
+      "PDF version" => "1.6"
     }
   end
 end
