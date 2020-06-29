@@ -30,7 +30,7 @@ defmodule ExEbook.MixProject do
   defp deps do
     [
       {:credo, "~> 1.3", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.18", only: :dev}
+      {:ex_doc, "~> 0.22", only: :dev, runtime: false}
     ]
   end
 
