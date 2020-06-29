@@ -78,3 +78,5 @@ And that's all
   At this moment we only support `content.opf` as the main file for extracting metadata. We need to change it and scan the `META-INF` directory and look for the `container` tag (probably inside `META-INF/container.xml`)
 
 * [ ] Using internal tool for reading PDF metadata
+
+* [ ] Improve Docs
