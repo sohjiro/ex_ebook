@@ -4,7 +4,7 @@ defmodule ExEbook do
   """
   @type path :: String.t()
   @type opts :: Keyword.t()
-  @type metadata :: ExEbook.Metadata.t()
+  @type metadata :: %ExEbook.Metadata{}
 
   @pdf ".pdf"
   @epub ".epub"
